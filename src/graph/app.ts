@@ -39,7 +39,7 @@ class App {
 
         this.graphs = [];
         this.funcs.forEach((func, i) => {
-            this.graphs[i] = new Graph(func, this.colors[i], 75);
+            this.graphs[i] = new Graph(func, this.colors[i], 75, 0.075);
         });
 
         this.size();

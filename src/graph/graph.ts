@@ -6,22 +6,20 @@ export class Graph {
     centerX: number;
     centerY: number;
 
-    cur: number;
-    speed: number;
-
     min: number;
     max: number;
 
     func: Func;
     color: string;
     zoom: number;
+    speed: number;
+    x: number;
 
-    constructor(func: Func, color: string, zoom: number) {
-        this.speed = 0.05;
-
+    constructor(func: Func, color: string, zoom: number, speed: number) {
         this.func = func;
         this.color = color;
         this.zoom = zoom;
+        this.speed = speed;
     }
 
     size(width: number, height: number) {
@@ -31,10 +29,8 @@ export class Graph {
         this.centerY = this.graphHeight / 2;
 
         this.min = this.centerX / this.zoom * -1;
-        this.max = this.centerY / this.zoom;
-        this.cur = this.min;
-
-        console.log(this.min, this.max);
+        this.max = this.centerX / this.zoom;
+        this.x = this.min;
     }
 
     drawPlane(ctx: CanvasRenderingContext2D) {
@@ -42,7 +38,7 @@ export class Graph {
         ctx.fillRect(0, 0, this.graphWidth, this.graphHeight);
 
         ctx.strokeStyle = "white";
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 1;
 
         ctx.beginPath();
         ctx.moveTo(0, this.centerY);
@@ -58,13 +54,12 @@ export class Graph {
     }
 
     drawGraph(ctx: CanvasRenderingContext2D) {
-        this.cur += this.speed;
-        console.log(this.cur);
+        this.x += this.speed;
 
         ctx.beginPath();
         ctx.arc(
-            this.centerX + this.cur * this.zoom,
-            this.centerY - this.func(this.cur) * this.zoom,
+            this.centerX + this.x * this.zoom,
+            this.centerY - this.func(this.x) * this.zoom,
             1, 0, Math.PI * 2
         );
         ctx.closePath();
@@ -72,8 +67,8 @@ export class Graph {
         ctx.fillStyle = this.color;
         ctx.fill();
 
-        if (this.cur > this.max) {
-            this.cur = this.min;
+        if (this.x > this.max) {
+            this.x = this.min;
             this.drawPlane(ctx);
         }
     }
